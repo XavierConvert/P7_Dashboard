@@ -35,6 +35,7 @@ def main():
         pred = request_prediction(FASTAPI_URI, data)#[0] #* 100000
         
         st.write(pred['prediction'])
+        st.write('Probabilité de remboursement (%):',pred['proba_rembour']*100)
 
 
 if __name__ == '__main__':
