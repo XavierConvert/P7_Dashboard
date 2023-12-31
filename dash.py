@@ -34,7 +34,7 @@ def main():
 
         pred = request_prediction(FASTAPI_URI, data)#[0] #* 100000
         
-        st.write(pred)
+        st.write(pred['prediction'])
 
 
 if __name__ == '__main__':
