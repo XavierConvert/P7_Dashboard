@@ -1,6 +1,9 @@
 import streamlit as st
 import pandas as pd
+
 import requests
+import shap
+shap.initjs()
 
 
 #st.write("Hello World")
@@ -36,10 +39,17 @@ def main():
         
         st.write(pred['prediction'])
         st.write('Probabilité de remboursement (%):',pred['proba_rembour']*100)
+        
+        shap_btn = st.button('Shap Values')
+        if predict_btn:
+            data = cid
+            shap_graph = 
 
 
 if __name__ == '__main__':
-    main()    
+    main()  
+    
+# streamlit run dash.py      
 
 # Add a selectbox to the sidebar:
 #add_selectbox = st.sidebar.selectbox(
