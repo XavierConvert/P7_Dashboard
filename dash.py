@@ -26,22 +26,6 @@ def request_data(model_uri):
     
     return data
 
-  
-def get_ids():
-    IDS_URI='http://127.0.0.1:8000/ids'
-    
-    ids= request_ids(IDS_URI)
-    cid = st.selectbox('Veuillez saisir la référence du crédit',ids)
-    
-    return cid
-
-def get_data():
-    DATA_URI='http://127.0.0.1:8000/data'
-    data_desc=request_data(DATA_URI)
-    data_desc=pd.DataFrame(data_desc)
-       
-    return data_desc
-
 def request_prediction(model_uri, data):
     headers = {"Content-Type": "application/json"}
 
@@ -55,12 +39,38 @@ def request_prediction(model_uri, data):
 
     return response.json()
 
+  
+def get_ids():
+    IDS_URI='http://127.0.0.1:8000/ids'
+    
+    ids= request_ids(IDS_URI)
+    cid = st.selectbox('Veuillez saisir la référence du crédit',ids)
+    
+    return cid
+
+def get_global_data():
+    DATA_URI='http://127.0.0.1:8000/data'
+    data_desc=request_data(DATA_URI)
+    data_desc=pd.DataFrame(data_desc)
+       
+    return data_desc
+
+# def get_client_data():
+    #cid = get_ids()
+    #CLIENT_URI='http://127.0.0.1:8000/client_details/%s' % cid
+    #cl_data=request_data(CLIENT_URI)
+    #cl_data=pd.DataFrame(cl_data)
+    #return cl_data
+
 
 def main():
     cid = get_ids()
-    descr =get_data()
+    descr =get_global_data()
+    #cl_data=get_client_data()
     PRED_URI = 'http://127.0.0.1:8000/prediction/%s' % cid
     SHAP_URI = 'http://127.0.0.1:8000/shap_val/%s' % cid
+    CLIENT_URI='http://127.0.0.1:8000/client_details/%s' % cid
+    
     
     
     predict_btn = st.button('Prédire')
@@ -84,6 +94,11 @@ def main():
             shap_val=request_prediction(SHAP_URI,data)
             st.write(shap_val)
              
+    cl_data=request_data(CLIENT_URI)
+    cl_data=pd.DataFrame(cl_data)
+    st.write('Données client')
+    st.dataframe(cl_data,use_container_width=True)
+    
     st.write('Stats globales - Tous dossiers:')
     descr=st.dataframe(descr,use_container_width=True)
     
