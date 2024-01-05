@@ -1,14 +1,13 @@
 import streamlit as st
 import pandas as pd
-
+import numpy as np
 import requests
+import json
 import shap
 shap.initjs()
 from streamlit_shap import st_shap
 
 st.title('Credit prediction')
-
-#cid=st.number_input('Veuillez saisir la référence du crédit',min_value=100000, max_value=500000)
 
 def request_ids(model_uri):
     headers = {"Content-Type": "application/json"}
@@ -92,7 +91,20 @@ def main():
         if cb_shap:
             #data = cid
             shap_val=request_prediction(SHAP_URI,data)
-            st.write(shap_val)
+            
+            sv=[]
+            fn=[]
+            for k,v in shap_val.items():
+                sv.append(v)
+                fn.append(k)
+            
+            sv=np.array(sv)
+            fn=np.array(fn)
+            
+            exp=shap.Explanation(sv,feature_names=fn)
+            
+            st_shap(shap.plots.bar(exp))          
+            #st.write(shap_val)
              
     cl_data=request_data(CLIENT_URI)
     cl_data=pd.DataFrame(cl_data)
