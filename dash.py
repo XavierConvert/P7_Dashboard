@@ -106,8 +106,8 @@ def main():
         pred = request_prediction(PRED_URI, data)#[0] #* 100000
         
         st.write(pred['prediction'])
-        st.write('Probabilité de remboursement (%):',round(pred['proba_rembour']*100,2))
-        
+        #st.write('Probabilité de remboursement (%):',round(pred['proba_rembour']*100,2))
+        st.write('Probabilité de remboursement: ', "{:.2%}".format(pred['proba_rembour']))
         
         #shap_btn = st.button('Shap Values')
         
