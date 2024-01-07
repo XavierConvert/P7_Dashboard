@@ -7,7 +7,9 @@ import shap
 shap.initjs()
 from streamlit_shap import st_shap
 
-st.title('Credit prediction')
+###############################################
+# Def des différentes requetes auprès de l'API:
+###############################################
 
 def request_ids(model_uri):
     headers = {"Content-Type": "application/json"}
@@ -38,6 +40,9 @@ def request_prediction(model_uri, data):
 
     return response.json()
 
+#####################################################################
+# Def des différentes fonctions appelant différentes routes de l'API:
+#####################################################################
   
 def get_ids():
     IDS_URI='http://127.0.0.1:8000/ids'
@@ -61,8 +66,26 @@ def get_global_data():
     #cl_data=pd.DataFrame(cl_data)
     #return cl_data
 
-
+###############################
+# Ecran principal du dashboard:
+###############################
 def main():
+    st.set_page_config (layout="wide")
+
+    col1, col2 =st.columns(2)
+
+    with col1:
+        st.image('Pret_a_depenser_logo.png',width=128)    
+
+    with col2:
+        
+        st.title('Credit prediction')
+
+    with st.sidebar.expander('A propos de cette app'):
+        st.write("Ce dashboard a pour but de visualiser pour une référence crédit donnée, la probabilité de remboursement du crédit ainsi que les caractéristique du souscripteur.")
+        
+    st.divider()  
+    
     cid = get_ids()
     descr =get_global_data()
     #cl_data=get_client_data()
