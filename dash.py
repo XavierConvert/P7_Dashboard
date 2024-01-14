@@ -107,7 +107,7 @@ def main():
         
         st.subheader(pred['prediction'])
         #st.write('Probabilité de remboursement (%):',round(pred['proba_rembour']*100,2))
-        st.write('Probabilité de remboursement: ', "{:.2%}".format(pred['proba_rembour']))
+        st.write('Probabilité de remboursement: ', "{:.0%}".format(pred['proba_rembour']))
         
         #shap_btn = st.button('Shap Values')
         
@@ -139,8 +139,10 @@ def main():
     
 if __name__ == '__main__':
     main()  
+  
+#.venv\Scripts\activate.bat
     
-# streamlit run dash.py      
+# streamlit run dash.py
 
 # Add a selectbox to the sidebar:
 #add_selectbox = st.sidebar.selectbox(
