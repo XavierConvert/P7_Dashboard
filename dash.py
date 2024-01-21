@@ -130,7 +130,7 @@ def main():
             #st.write(shap_val)
              
     cl_data=request_data(CLIENT_URI)
-    cl_data=pd.DataFrame(cl_data)
+    #cl_data=pd.DataFrame(cl_data)
     st.write('Données client')
     st.dataframe(cl_data,use_container_width=True)
     
