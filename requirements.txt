@@ -4,3 +4,4 @@ numpy
 requests
 #json
 shap
+matplotlib
