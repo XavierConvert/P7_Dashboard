@@ -6,4 +6,4 @@ requests
 shap
 matplotlib
 ipython
-streamlit_shap
+streamlit-shap
