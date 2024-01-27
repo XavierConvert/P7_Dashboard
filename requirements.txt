@@ -5,3 +5,4 @@ requests
 #json
 shap
 matplotlib
+ipython
