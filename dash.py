@@ -155,7 +155,7 @@ def main():
                 'AMT_GOODS_PRICE:--------montant du bien financé\n'
                 'CNT_FAM_MEMBERS:--------nombre de personnes dans le foyer du client\n'
                 "EXT_SOURCE_1, 2 et 3:---scores clients obtenus d'établissements de crédit (EC) tiers \n"
-                "Prev_contract_nb:-------nb de crédits precedemment ouverts dabs nos livres ou dans d'autres EC\n"
+                "Prev_contract_nb:-------nb de crédits precedemment ouverts dans nos livres ou dans d'autres EC\n"
                 "Prev_AMT_CREDIT:--------montant total des crédits precedemment ouverts dans nos livres ou dans d'autres EC\n"
                 'Refused_rate:-----------taux de refus sur demandes de crédits precédentes\n'
                 'default_payment:--------le client a t-il déjà eu des incidents de paiements (0= non)\n'
