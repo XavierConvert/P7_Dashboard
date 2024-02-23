@@ -6,6 +6,7 @@ import json
 import shap
 shap.initjs()
 from streamlit_shap import st_shap
+import streamviz
 
 ###############################################
 # Def des différentes requetes auprès de l'API:
@@ -48,7 +49,7 @@ def get_ids():
     IDS_URI='https://xavier-convert.onrender.com/ids'
     
     ids= request_ids(IDS_URI)
-    cid = st.selectbox('Veuillez saisir la référence du crédit',ids)
+    cid = st.selectbox('Veuillez selectionner ou saisir la référence du client',ids)
     
     return cid
 
@@ -79,11 +80,14 @@ def main():
 
     with col2:
         
-        st.title('Credit prediction')
+        st.title('Simulateur crédit')
 
     with st.sidebar.expander('A propos de cette app'):
-        st.write("Ce dashboard a pour but de visualiser pour une référence crédit donnée, la probabilité de remboursement du crédit ainsi que les caractéristique du souscripteur.")
-        
+        st.write("Ce dashboard a pour but de visualiser pour une référence client donnée, la probabilité de remboursement du crédit ainsi que les caractéristiques du souscripteur.")
+    
+    with st.sidebar.expander('Disclaimer'):    
+        st.write("Les predictions affichées se basent sur un modèle d'apprentissage automatique. La demande devra être validée par un analyste crédit")
+            
     st.divider()  
     
     cid = get_ids()
@@ -96,7 +100,7 @@ def main():
     
     
     predict_btn = st.button('Prédire')
-    cb_shap=st.checkbox('Show SHAP values') 
+    cb_shap=st.checkbox("Afficher l'importance locale des variables") 
            
     
     if predict_btn:
@@ -105,11 +109,14 @@ def main():
 
         pred = request_prediction(PRED_URI, data)#[0] #* 100000
         
-        st.subheader(pred['prediction'])
-        #st.write('Probabilité de remboursement (%):',round(pred['proba_rembour']*100,2))
-        st.write('Probabilité de remboursement: ', "{:.0%}".format(pred['proba_rembour']))
-        
-        #shap_btn = st.button('Shap Values')
+        st.header(pred['prediction'])
+                
+        streamviz.gauge(pred['proba_rembour'],
+                        gTitle=('Probabilité de remboursement: '),
+                        sFix="%",
+                        gSize='MED',
+                        grMid=0.5
+                        )
         
         if cb_shap:
             #data = cid
@@ -126,12 +133,44 @@ def main():
             
             exp=shap.Explanation(sv,feature_names=fn)
             
+            with st.expander('Explications'):
+                st.text('Le graphe ci dessous représente les variables ayant le plus contribué à la prédiction\n\n'
+                        'Les valeurs des variables bleues en bleu améliorent le score\n\n'
+                        'Les valeurs des variables rougess en bleu détériorent le score'
+                        )
+            
             st_shap(shap.plots.bar(exp))          
             #st.write(shap_val)
              
     cl_data=request_data(CLIENT_URI)
     #cl_data=pd.DataFrame(cl_data)
-    st.write('Données client')
+    
+    with st.expander('Données client (déroulez le menu pour les explications des variables):'):
+        st.text('SK_ID_CURR:-------------référence du client\n'
+                'FLAG_OWN_CAR:-----------le client possède t il son propre véhicule (0 =non)\n'
+                'FLAG_OWN_REALTY:--------le client possède t il son propre bien immobilier (0 =non)\n'
+                'AMT_INCOME_TOTAL:-------revenus du client\n'
+                'AMT_CREDIT:-------------montant du crédit\n'
+                'AMT_ANNUITY:------------montant des annuités\n'
+                'AMT_GOODS_PRICE:--------montant du bien financé\n'
+                'CNT_FAM_MEMBERS:--------nombre de personnes dans le foyer du client\n'
+                "EXT_SOURCE_1, 2 et 3:---scores clients obtenus d'établissements de crédit (EC) tiers \n"
+                "Prev_contract_nb:-------nb de crédits precedemment ouverts dabs nos livres ou dans d'autres EC\n"
+                "Prev_AMT_CREDIT:--------montant total des crédits precedemment ouverts dans nos livres ou dans d'autres EC\n"
+                'Refused_rate:-----------taux de refus sur demandes de crédits precédentes\n'
+                'default_payment:--------le client a t-il déjà eu des incidents de paiements (0= non)\n'
+                'INCOME_CREDIT_PERC:-----revenus du client / montant du crédit\n'
+                "ANNUITY_INCOME_PERC:----montant de l'annuité / revenus du client \n"
+                "PAYMENT_RATE:-----------montant de l'annuité / montant du crédit\n"
+                'client_age:-------------age du client\n'
+                'client_prof_exp:--------ancienneté professionnelle du client (en années)\n'
+                'INCOME_PER_PERSON:------revenus par personne du foyer du client\n'
+                "Cash_loans:-------------1= prêt à la consommation , 0= crédit revolving\n"
+                'GENDER_FEMALE:----------genre (0 = M, 1= F)\n'
+                'active_client:----------le client exerce-t-il une profession (0=non)\n'
+                'relationship:-----------situation maritale du client (0: seul, 1: en couple)\n'
+                )
+    #st.write('Données client')
     st.dataframe(cl_data,use_container_width=True)
     
     st.write('Stats globales - Tous dossiers:')
