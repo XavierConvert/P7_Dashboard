@@ -6,7 +6,10 @@ import json
 import shap
 shap.initjs()
 from streamlit_shap import st_shap
+#import plotly.graph_objects as go
+#import matplotlib.pyplot as plt
 import streamviz
+
 
 ###############################################
 # Def des différentes requetes auprès de l'API:
@@ -46,7 +49,7 @@ def request_prediction(model_uri, data):
 #####################################################################
   
 def get_ids():
-    IDS_URI='https://xavier-convert.onrender.com/ids'
+    IDS_URI='http://127.0.0.1:8000/ids'
     
     ids= request_ids(IDS_URI)
     cid = st.selectbox('Veuillez selectionner ou saisir la référence du client',ids)
@@ -54,7 +57,7 @@ def get_ids():
     return cid
 
 def get_global_data():
-    DATA_URI='https://xavier-convert.onrender.com/data'
+    DATA_URI='http://127.0.0.1:8000/data'
     data_desc=request_data(DATA_URI)
     data_desc=pd.DataFrame(data_desc)
        
@@ -86,31 +89,32 @@ def main():
         st.write("Ce dashboard a pour but de visualiser pour une référence client donnée, la probabilité de remboursement du crédit ainsi que les caractéristiques du souscripteur.")
     
     with st.sidebar.expander('Disclaimer'):    
-        st.write("Les predictions affichées se basent sur un modèle d'apprentissage automatique. La demande devra être validée par un analyste crédit")
-            
+        st.write("Les predictions affichées se basent sur un modèle d'apprentissage automatique.La demande devra être validée par un analyste crédit")
     st.divider()  
     
     cid = get_ids()
     descr =get_global_data()
+    
+        
     #cl_data=get_client_data()
-    PRED_URI = 'https://xavier-convert.onrender.com/prediction/%s' % cid
-    SHAP_URI = 'https://xavier-convert.onrender.com/shap_val/%s' % cid
-    CLIENT_URI='https://xavier-convert.onrender.com/client_details/%s' % cid
+    PRED_URI = 'http://127.0.0.1:8000/prediction/%s' % cid
+    SHAP_URI = 'http://127.0.0.1:8000/shap_val/%s' % cid
+    CLIENT_URI='http://127.0.0.1:8000/client_details/%s' % cid
     
     
     
     predict_btn = st.button('Prédire')
     cb_shap=st.checkbox("Afficher l'importance locale des variables") 
-           
     
     if predict_btn:
         data = cid
-        #pred = None
+        
 
-        pred = request_prediction(PRED_URI, data)#[0] #* 100000
+        pred = request_prediction(PRED_URI, data)
         
         st.header(pred['prediction'])
-                
+        #st.write('Probabilité de remboursement (%):',round(pred['proba_rembour']*100,2))
+        
         streamviz.gauge(pred['proba_rembour'],
                         gTitle=('Probabilité de remboursement: '),
                         sFix="%",
@@ -118,6 +122,7 @@ def main():
                         grMid=0.5
                         )
         
+  
         if cb_shap:
             #data = cid
             shap_val=request_prediction(SHAP_URI,data)
@@ -140,11 +145,9 @@ def main():
                         )
             
             st_shap(shap.plots.bar(exp))          
-            #st.write(shap_val)
-             
+                                     
     cl_data=request_data(CLIENT_URI)
     #cl_data=pd.DataFrame(cl_data)
-    
     with st.expander('Données client (déroulez le menu pour les explications des variables):'):
         st.text('SK_ID_CURR:-------------référence du client\n'
                 'FLAG_OWN_CAR:-----------le client possède t il son propre véhicule (0 =non)\n'
@@ -170,6 +173,7 @@ def main():
                 'active_client:----------le client exerce-t-il une profession (0=non)\n'
                 'relationship:-----------situation maritale du client (0: seul, 1: en couple)\n'
                 )
+        
     #st.write('Données client')
     st.dataframe(cl_data,use_container_width=True)
     
@@ -179,3 +183,18 @@ def main():
 if __name__ == '__main__':
     main()  
   
+#.venv\Scripts\activate.bat
+    
+# streamlit run dash.py
+
+# Add a selectbox to the sidebar:
+#add_selectbox = st.sidebar.selectbox(
+#    'How would you like to be contacted?',
+#    ('Email', 'Home phone', 'Mobile phone')
+#)
+
+# Add a slider to the sidebar:
+#add_slider = st.sidebar.slider(
+#    'Select a range of values',
+#    0.0, 100.0, (25.0, 75.0)
+#)
