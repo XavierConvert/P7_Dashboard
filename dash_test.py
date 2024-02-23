@@ -185,7 +185,7 @@ if __name__ == '__main__':
   
 #.venv\Scripts\activate.bat
     
-# streamlit run dash.py
+# streamlit run dash_test.py
 
 # Add a selectbox to the sidebar:
 #add_selectbox = st.sidebar.selectbox(
