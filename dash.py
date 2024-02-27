@@ -100,7 +100,7 @@ def main():
     
     
     predict_btn = st.button('Prédire')
-    cb_shap=st.checkbox("Afficher l'importance des variables dasn la prédiction") 
+    cb_shap=st.checkbox("Afficher l'importance des variables pour la prédiction") 
            
     
     if predict_btn:
