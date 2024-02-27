@@ -7,6 +7,7 @@ import shap
 shap.initjs()
 from streamlit_shap import st_shap
 #import plotly.graph_objects as go
+import plotly.express as px
 #import matplotlib.pyplot as plt
 import streamviz
 
@@ -178,7 +179,13 @@ def main():
     st.dataframe(cl_data,use_container_width=True)
     
     st.write('Stats globales - Tous dossiers:')
-    descr=st.dataframe(descr,use_container_width=True)
+    st.dataframe(descr,use_container_width=True) #descr=
+    
+    #plotly:
+    
+    #df=pd.DataFrame(cl_data)
+    #fig=px.bar(descr)#.iloc[:,0])
+    #st.plotly_chart(fig, use_container_width=True )
     
 if __name__ == '__main__':
     main()  
