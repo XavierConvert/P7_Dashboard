@@ -27,8 +27,9 @@ Code used in production with:
 
 + API answers transformations
 
-##dash_test.py : same that dash.py except routes (local instead of render)
+## dash_test.py
 
+same than dash.py except routes (local instead of render production URI)
 
 # Installation
 
@@ -37,5 +38,9 @@ For local access:
 - import libraries (requirements.txt)
 - run: streamlit run dash_test.py
 
-Production: https://xavierconvert-p7-dashboard.streamlit.app/
+Production:
+
+While pushing a new version of dash.py on Github, update of app
+
+ https://xavierconvert-p7-dashboard.streamlit.app/
 
