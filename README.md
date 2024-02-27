@@ -22,7 +22,6 @@ Code used in production with:
 
 - predictions and shap_values are called directly through request_predictions
 
-
 - construction of GUI with streamlit built_in functions => main()
 
 + API answers transformations

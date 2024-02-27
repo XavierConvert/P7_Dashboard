@@ -53,7 +53,7 @@ def get_ids():
     IDS_URI='http://127.0.0.1:8000/ids'
     
     ids= request_ids(IDS_URI)
-    cid = st.selectbox('Veuillez selectionner ou saisir la référence du client',ids)
+    cid=st.selectbox('Veuillez selectionner ou saisir la référence du client',ids)
     
     return cid
 
@@ -64,12 +64,13 @@ def get_global_data():
        
     return data_desc
 
-# def get_client_data():
-    #cid = get_ids()
-    #CLIENT_URI='http://127.0.0.1:8000/client_details/%s' % cid
-    #cl_data=request_data(CLIENT_URI)
-    #cl_data=pd.DataFrame(cl_data)
-    #return cl_data
+ #Test 27/02
+#def get_client_data():
+#    cid = get_ids()
+#    CLIENT_URI='http://127.0.0.1:8000/client_details/%s' % cid
+#    cl_data=request_data(CLIENT_URI)
+#    cl_data=pd.DataFrame(cl_data)
+#    return cl_data
 
 ###############################
 # Ecran principal du dashboard:
@@ -96,12 +97,15 @@ def main():
     cid = get_ids()
     descr =get_global_data()
     
-        
+    #Test du 27/02/24    
     #cl_data=get_client_data()
+    
     PRED_URI = 'http://127.0.0.1:8000/prediction/%s' % cid
     SHAP_URI = 'http://127.0.0.1:8000/shap_val/%s' % cid
     CLIENT_URI='http://127.0.0.1:8000/client_details/%s' % cid
     
+    #Test du 27/02
+    #cid = st.selectbox('Veuillez selectionner ou saisir la référence du client',cid)
     
     
     predict_btn = st.button('Prédire')
@@ -147,7 +151,13 @@ def main():
             
             st_shap(shap.plots.bar(exp))          
                                      
-    cl_data=request_data(CLIENT_URI)
+    
+    #Test du 27/02/2024
+    cl_data=request_data(CLIENT_URI)# => ligne OK
+    
+    #cl_data=get_client_data()
+    
+    
     #cl_data=pd.DataFrame(cl_data)
     with st.expander('Données client (déroulez le menu pour les explications des variables):'):
         st.text('SK_ID_CURR:-------------référence du client\n'
