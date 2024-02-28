@@ -134,9 +134,9 @@ def main():
             exp=shap.Explanation(sv,feature_names=fn)
             
             with st.expander('Explications'):
-                st.text('Le graphe ci dessous représente les variables ayant le plus contribué à la prédiction\n\n'
-                        'Les valeurs des variables bleues en bleu améliorent le score\n\n'
-                        'Les valeurs des variables rougess en bleu détériorent le score'
+                st.text('Le graphe ci dessous représente les variables ayant le plus contribué à la prédiction.\n\n'
+                        'Les valeurs bleues indiquent des variables améliorant le score.\n\n'
+                        'Les valeurs rouges indiquent des variables détériorant le score.'
                         )
             
             st_shap(shap.plots.bar(exp))          
